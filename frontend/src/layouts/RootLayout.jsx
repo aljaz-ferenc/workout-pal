@@ -28,6 +28,7 @@ export default function RootLayout() {
 }
 
 export const protectedLoader = async () => {
+  console.log('auth')
   const response = await authenticateUser();
   if (response.status === "fail") return redirect("/login");
   return response;

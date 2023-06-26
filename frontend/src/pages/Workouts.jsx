@@ -16,6 +16,7 @@ import {
 import { BiSearchAlt } from "react-icons/bi";
 
 export default function Workouts() {
+  console.log('workouts')
   const [workouts, setWorkouts] = useState();
   const [search, setSearch] = useState("");
   const [displayedWorkouts, setDisplayedWorkouts] = useState();

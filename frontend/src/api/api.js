@@ -73,14 +73,16 @@ export const createWorkout = async (workout) => {
 
 export const authenticateUser = async () => {
     try {
-
-        const response = await fetch(`${url}/auth`, {
+        
+        const response = await fetch(`https://workout-pal-ethj.onrender.com/api/v1/auth`, {
             method: 'GET',
             credentials: 'include'
         })
-
+        
+        console.log(response)
         return await response.json()
     } catch (err) {
+        console.log(err.message)
         return err
     }
 }

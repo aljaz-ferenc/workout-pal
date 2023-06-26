@@ -85,7 +85,7 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports .logout = async (req, res) => {
+exports.logout = async (req, res) => {
     try{
         res.cookie('workouts', '', {maxAge: 1})
         res.status(200).json({
