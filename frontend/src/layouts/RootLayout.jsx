@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Navigation from "../components/Navigation";
-import { Navigate, Outlet, useLoaderData } from "react-router-dom";
+import { Navigate, Outlet, redirect, useLoaderData } from "react-router-dom";
 import "./RootLayout.scss";
 import MobileNavigation from "../components/MobileNavigation";
 import { useUserStore } from "../store/userStore";

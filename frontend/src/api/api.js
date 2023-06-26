@@ -1,4 +1,5 @@
-const url = 'http://localhost:3000/api/v1'
+const url = 'https://workout-pal-ethj.onrender.com/api/v1'
+// const url = 'http://localhost:3000/api/v1'
 
 export const loginUser = async (user) => {
     const response = await fetch(`${url}/users/login`, {

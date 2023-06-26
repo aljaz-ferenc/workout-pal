@@ -58,7 +58,7 @@ export default function LoginForm({ state, setState }) {
 
   const loginFormik = useFormik({
     initialValues: loginInitialValues,
-    onSubmit: async (values) => {
+    onSubmit: async(values) => {
       setIsLoading(true);
       const response = await loginUser(values);
       setIsLoading(false);
