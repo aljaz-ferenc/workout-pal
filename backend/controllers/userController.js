@@ -66,7 +66,7 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async (req, res, next) => {
-    console.log('login body: ' + req.body)
+    console.log('login body: ' + req.body.password)
     try {
         const {email, password} = req.body
         if(!email || !password) return next(new Error('Please provide your email and pasword.'))
