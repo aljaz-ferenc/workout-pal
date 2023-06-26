@@ -1,0 +1,11 @@
+.workout-complete {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  display: grid;
+  place-content: center;
+  background-color: white;
+  z-index: 10;
+}

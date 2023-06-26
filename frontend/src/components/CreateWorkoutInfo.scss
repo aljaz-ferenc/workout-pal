@@ -1,0 +1,11 @@
+.info-form-container{
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .info-form-container{
+        border: none;
+        border-radius: 0;
+    }
+  }
+  

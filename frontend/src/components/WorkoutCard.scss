@@ -1,0 +1,11 @@
+.workout-card {
+  background-position: center;
+  background-size: cover;
+  color: white;
+  overflow: hidden;
+  &__difficulty {
+    height: 2rem;
+    display: grid;
+    place-content: center;
+  }
+}

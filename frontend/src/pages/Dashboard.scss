@@ -1,0 +1,13 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: min-content auto;
+  gap: 1rem;
+  & > div {
+    box-shadow: 1px 1px 10px rgba($color: #000000, $alpha: 0.2);
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    background-color: rgb(31, 29, 29);
+    border-radius: 8px;
+  }
+}

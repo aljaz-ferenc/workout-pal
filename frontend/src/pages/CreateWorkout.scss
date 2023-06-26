@@ -1,0 +1,22 @@
+.create-workout {
+  display: grid;
+  place-content: center;
+  height: 100%;
+  form {
+    width: 100%;
+  }
+  &__exercises {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-workout {
+    max-width: 90%;
+    margin: 0 auto !important;
+    padding: 0;
+    form {
+      padding: 1rem;
+    }
+  }
+}
