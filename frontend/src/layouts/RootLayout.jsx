@@ -10,6 +10,7 @@ export default function RootLayout() {
   const setUser = useUserStore((state) => state.setUser);
   const auth = useLoaderData();
   const userId = auth.data._id;
+  console.log(auth)
 
   setUser(userId); 
 
@@ -28,8 +29,8 @@ export default function RootLayout() {
 }
 
 export const protectedLoader = async () => {
-  console.log('auth')
   const response = await authenticateUser();
+  console.log(response)
   if (response.status === "fail") return redirect("/login");
   return response;
 };

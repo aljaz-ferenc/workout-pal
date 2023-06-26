@@ -1,5 +1,5 @@
-const url = 'https://workout-pal-ethj.onrender.com/api/v1'
-// const url = 'http://localhost:3000/api/v1'
+// const url = 'https://workout-pal-ethj.onrender.com/api/v1'
+const url = 'http://localhost:3000/api/v1'
 
 export const loginUser = async (user) => {
     const response = await fetch(`${url}/users/login`, {
@@ -34,7 +34,7 @@ export const signupUser = async (user) => {
 }
 
 export const getMyWorkouts = async () => {
-    const response = await fetch('http://localhost:3000/api/v1/users/workouts',
+    const response = await fetch(`${url}/users/workouts`,
         {
             method: 'GET',
             credentials: 'include'
@@ -72,19 +72,18 @@ export const createWorkout = async (workout) => {
 }
 
 export const authenticateUser = async () => {
-    try {
+    // try {
         
-        const response = await fetch(`https://workout-pal-ethj.onrender.com/api/v1/auth`, {
+        const response = await fetch(`${url}/auth`, {
             method: 'GET',
             credentials: 'include'
         })
         
-        console.log(response)
         return await response.json()
-    } catch (err) {
-        console.log(err.message)
-        return err
-    }
+    // } catch (err) {
+    //     console.log(err)
+    //     return err
+    // }
 }
 
 export const getAllWorkouts = async () => {

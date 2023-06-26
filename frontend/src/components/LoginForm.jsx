@@ -62,6 +62,7 @@ export default function LoginForm({ state, setState }) {
       setIsLoading(true);
       const response = await loginUser(values);
       setIsLoading(false);
+      console.log(response)
       if (response.status === "success") {
         setUser(response.data._id);
         navigate("/workouts");

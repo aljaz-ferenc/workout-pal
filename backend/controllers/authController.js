@@ -27,6 +27,7 @@ const sendToken = (user, statusCode, res) => {
 }
 
 exports.protect = async (req, res, next) => {
+    console.log('protect')
     try{
         const token = req.cookies.workouts
         
@@ -50,10 +51,11 @@ exports.protect = async (req, res, next) => {
 }
 
 exports.authenticateUser = async (req, res, next) => {
+    console.log('authenticate cookies: ' + req.cookies.workouts)
     try{
         const token = req.cookies.workouts
 
-        if(!token) return next(new Error('You are not logged in.'))
+        if(!token) return next(new Error('You are not logged in.....'))
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         const currentUser = await User.findById(decoded.id)
