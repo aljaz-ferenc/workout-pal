@@ -176,7 +176,7 @@ export default function LoginForm({ state, setState }) {
                 )}
               {error === "Password incorrect." && (
                 <FormHelperText position="absolute" color="red">
-                  Password incorrect.
+                  Password or email incorrect.
                 </FormHelperText>
               )}
             </FormControl>
