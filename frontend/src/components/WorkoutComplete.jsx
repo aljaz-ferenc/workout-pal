@@ -26,7 +26,7 @@ export default function WorkoutComplete({ workoutIsComplete }) {
           Back to workouts
         </Button>
       </Box>
-      <Confetti />
+      <Confetti className="workout-complete__confetti"/>
     </motion.div>
   );
 }

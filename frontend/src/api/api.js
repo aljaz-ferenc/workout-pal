@@ -1,6 +1,6 @@
 // const url = 'https://workout-pal-ethj.onrender.com/api/v1'
 // const url = 'http://localhost:3000/api/v1'
-const url = 'https://rich-blue-zebra-sari.cyclic.app/api/v1'
+const url = 'https://elegant-bat-buckle.cyclic.app/api/v1'
 
 export const loginUser = async (user) => {
 

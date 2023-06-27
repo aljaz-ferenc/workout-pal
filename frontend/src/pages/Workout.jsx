@@ -131,10 +131,14 @@ export default function Workout() {
         <WorkoutComplete workoutIsComplete={workoutIsComplete} />
       )}
       <Box className="workout__top">
-        <Heading>
+        {!isPausing && <Heading>
           Round {exerciseState.currentRound} / {workout.rounds}{" "}
-          {isPausing && "complete"}
-        </Heading>
+
+        </Heading>}
+        {isPausing && <Heading>
+          Round {exerciseState.currentRound - 1} / {workout.rounds} complete
+
+        </Heading>}
       </Box>
       <Box maxWidth="30rem" w="full" className="workout__center">
         {!isResting && !isPausing && (
