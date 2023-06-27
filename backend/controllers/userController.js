@@ -3,9 +3,8 @@ const Workout = require('../models/workoutModel')
 const jwt = require('jsonwebtoken')
 
 const signToken = id => {
-    console.log(id + 'hhhhhhhhhhhhhhhh')
     return jwt.sign({ id: id._id }, process.env.JWT_SECRET, {
-        expiresIn:'24h'
+        expiresIn: '24h'
     })
 }
 
@@ -56,22 +55,22 @@ exports.register = async (req, res) => {
             passwordConfirm: req.body.passwordConfirm
         })
 
-        
-        const token = jwt.sign({user: user._id.toString()}, process.env.JWT_SECRET, {
+
+        const token = jwt.sign({ user: user._id.toString() }, process.env.JWT_SECRET, {
             expiresIn: '24h'
         })
-        
+
         res.status(201).json({
             status: 'success',
             token,
             data: {
                 id: user._id,
                 name: user.name,
-                email:user.email
+                email: user.email
             }
         })
 
-        
+
     } catch (err) {
         res.status(404).json({
             status: 'fail',
@@ -81,26 +80,26 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async (req, res, next) => {
-    
     try {
-        const {email, password} = req.body
-        if(!email || !password) return next(new Error('Please provide your email and pasword.'))
+        const { email, password } = req.body
 
-        const user = await User.findOne({email: req.body.email}).select('+password')
-        if(!user) return next(new Error('User not found.'))
+        if (!email || !password) return next(new Error('Please provide your email and pasword.'))
 
-        if(!await user.checkPassword(password, user.password)) return next(new Error('Password incorrect.'))
+
+        const user = await User.findOne({ email: req.body.email }).select('+password')
+        if (!user) return next(new Error('User not found.'))
+        if (!await user.checkPassword(password, user.password)) return next(new Error('Password incorrect.'))
+
 
         user.password = undefined
 
-        const token = jwt.sign({user: user._id.toString()}, process.env.JWT_SECRET, {
+        const token = jwt.sign({ user: user._id.toString() }, process.env.JWT_SECRET, {
             expiresIn: '24h'
         })
 
-        console.log(token)
         res.status(200).json({
             status: 'success',
-            data: {token, user}
+            data: { token, user }
         })
 
     } catch (err) {
@@ -112,13 +111,13 @@ exports.login = async (req, res, next) => {
 }
 
 exports.logout = async (req, res) => {
-    try{
-        res.cookie('workouts', '', {maxAge: 1})
+    try {
+        res.cookie('workouts', '', { maxAge: 1 })
         res.status(200).json({
             status: 'success',
             data: 'logged out'
         })
-    }catch(err){
+    } catch (err) {
         res.status(401).json({
             status: 'fail',
             message: err.message
@@ -127,15 +126,15 @@ exports.logout = async (req, res) => {
 }
 
 exports.getMyWorkouts = async (req, res) => {
-    try{
+    try {
         const userId = req.params.userId
-        const workouts = await Workout.find({user: userId})
+        const workouts = await Workout.find({ user: userId })
 
         res.status(200).json({
             status: 'success',
             data: workouts
         })
-    }catch(err){
+    } catch (err) {
         res.status(404).json({
             status: 'fail',
             message: "Could not get the user's workouts"
@@ -144,15 +143,15 @@ exports.getMyWorkouts = async (req, res) => {
 }
 
 exports.getWorkoutsByUser = async (req, res) => {
-    try{
-        const workouts = await Workout.find({user: req.params.userId})
+    try {
+        const workouts = await Workout.find({ user: req.params.userId })
 
         res.status(200).json({
             status: 'success',
             data: workouts
         })
 
-    }catch(err){
+    } catch (err) {
         res.status(404).json({
             status: 'fail',
             message: "Could not get the user's workouts"
@@ -161,21 +160,21 @@ exports.getWorkoutsByUser = async (req, res) => {
 }
 
 exports.deleteUser = async (req, res, next) => {
-    try{
+    try {
         const userId = req.params.userId
         const user = await User.findById(userId).select('+password')
         const password = req.body.password
 
-        if(!(await user.checkPassword(password, user.password))) return next(new Error('password incorrect'))
+        if (!(await user.checkPassword(password, user.password))) return next(new Error('password incorrect'))
         await User.findByIdAndDelete(userId)
-        await Workout.deleteMany({user: userId})
+        await Workout.deleteMany({ user: userId })
 
         res.status(200).json({
             status: 'success',
             data: user
         })
 
-    }catch(err){
+    } catch (err) {
         res.status(404).json({
             status: 'fail',
             message: err.message

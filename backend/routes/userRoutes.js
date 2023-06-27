@@ -4,26 +4,26 @@ const authController = require('../controllers/authController')
 
 const router = express.Router()
 
-router.route('/')
-    .get(userController.getAllUsers)
 
-router.route('/:userId')
-    .delete(userController.deleteUser)
 
 router.route('/workouts/:userId')
-    .get(userController.getMyWorkouts)
+.get(userController.getMyWorkouts)
 
 
 router.route('/login')
-    .post(userController.login)
+.post(userController.login)
 
 router.route('/signup')
-    .post(userController.register)
+.post(userController.register)
 
 router.route('/logout')
-    .get(userController.logout)
+.get(userController.logout)
 
 router.route('/updateMyPassword')
-    .patch(authController.updatePassword)
+.patch(authController.updatePassword)
+router.route('/:userId')
+.delete(userController.deleteUser)
+router.route('/')
+    .get(userController.getAllUsers)
 
 module.exports = router

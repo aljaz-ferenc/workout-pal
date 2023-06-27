@@ -1,21 +1,24 @@
 // const url = 'https://workout-pal-ethj.onrender.com/api/v1'
-
-const url = 'http://localhost:3000/api/v1'
-// const url = 'https://rich-blue-zebra-sari.cyclic.app/api/v1'
+// const url = 'http://localhost:3000/api/v1'
+const url = 'https://rich-blue-zebra-sari.cyclic.app/api/v1'
 
 export const loginUser = async (user) => {
+
     const response = await fetch(`${url}/users/login`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+        
         },
         body: JSON.stringify({
             email: user.email,
             password: user.password
         })
     })
+
     return await response.json()
 }
+
 
 export const signupUser = async (user) => {
     const response = await fetch(`${url}/users/signup`, {
@@ -76,11 +79,8 @@ export const authenticateUser = async () => {
                 'authorization': `Bearer ${token}`
             },
         })
-        console.log(token)
-        // console.log(awaitresponse.json())
         return await response.json()
     } catch (err) {
-        console.log(err.message)
         return err
     }
 }
@@ -109,7 +109,7 @@ export const deleteUser = async (userId, password) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({password})
+        body: JSON.stringify({ password })
     })
     return await response.json()
 }

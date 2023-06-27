@@ -53,28 +53,36 @@ export default function LoginForm({ state, setState }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const {setUser, user} = useUserStore((state) => state);
+  const { setUser, user } = useUserStore((state) => state);
 
-  const handleLogin = async (values) => {
+  const handleLogin = (values) => {
     setIsLoading(true);
-    const response = await loginUser(values);
-    setIsLoading(false);
-    console.log(response)
-    if (response.status === "success") {
-      const user = {
-        email: response.data.user.email,
-        name: response.data.user.name,
-        id: response.data.user._id
-      }
-      // console.log(user)
-      setUser(user);
-      localStorage.setItem('workout-pal', JSON.stringify(response.data.token))
-      console.log(localStorage.getItem('workout-pal'))
-      navigate("/workouts");
-    } else {
-      setError(response.message);
-    }
-  }
+    loginUser(values)
+      .then((res) => {
+        console.log(res);
+        if (res.status === "success") {
+          const user = {
+            email: res.data.user.email,
+            name: res.data.user.name,
+            id: res.data.user._id,
+          };
+          console.log(user);
+          setUser(user);
+          localStorage.setItem("workout-pal", JSON.stringify(res.data.token));
+          setIsLoading(false);
+          navigate("/workouts");
+        } else {
+          throw new Error(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   const loginFormik = useFormik({
     initialValues: loginInitialValues,

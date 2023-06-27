@@ -20,9 +20,9 @@ const activeProp = {
 export default function Navigation() {
   const navigate = useNavigate();
   const handleLogout = () => {
-    logoutUser().then((res) => {
+      localStorage.removeItem('workout-pal')
       navigate("/login");
-    });
+  
   };
   return (
     <Box

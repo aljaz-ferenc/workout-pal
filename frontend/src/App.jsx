@@ -8,7 +8,7 @@ import {
 import Workout from "./pages/Workout";
 import Workouts from "./pages/Workouts";
 import Login from "./pages/Login";
-import RootLayout, { protectedLoader } from "./layouts/RootLayout";
+import RootLayout from "./layouts/RootLayout";
 import MyWorkouts from "./pages/MyWorkouts";
 import Account from "./pages/Account";
 import SingleWorkout, { workoutLoader } from "./pages/SingleWorkout";
@@ -19,7 +19,7 @@ export default function App() {
     createRoutesFromElements(
       <Route>
         <Route path="login" element={<Login />} />
-        <Route element={<RootLayout />} loader={protectedLoader} >
+        <Route element={<RootLayout />}  >
           <Route path="/" element={<Navigate to="workouts" />} />
           <Route path="workouts" element={<Workouts />} />
           <Route path="workouts/:workoutId" element={<SingleWorkout />} />

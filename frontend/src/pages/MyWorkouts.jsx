@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getMyWorkouts } from "../api/api";
-import { Box, Button, Grid, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Grid, Heading, Spinner, Text } from "@chakra-ui/react";
 import WorkoutCard from "../components/WorkoutCard";
 import "./MyWorkouts.scss";
 import { useUserStore } from "../store/userStore";
@@ -8,10 +8,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function MyWorkouts() {
   const [workouts, setWorkouts] = useState([]);
+  const [isFetching, setIsFetching] = useState(false)
   const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsFetching(true)
     getMyWorkouts(user.id)
       .then((res) => res.json())
       .then((json) => {
@@ -20,7 +22,8 @@ export default function MyWorkouts() {
         setWorkouts(json.data);
         console.log(workouts)
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(err.message))
+      .finally(() => setIsFetching(false))
   }, []);
 
   return (
@@ -28,7 +31,7 @@ export default function MyWorkouts() {
       <Heading color="#F1F6F9" className="my-workouts__heading" pb="2rem">
         My Workouts
       </Heading>
-      {workouts.length === 0 && (
+      {!isFetching && workouts.length === 0 && (
         <Box>
           <Text mb="2rem">You haven't created any workouts yet.</Text>
           <Button
@@ -37,6 +40,21 @@ export default function MyWorkouts() {
           >
             Create your first workout
           </Button>
+        </Box>
+      )}
+      {isFetching && (
+        <Box 
+          w='full'
+          display='grid'
+          placeContent='center'
+        >
+        <Spinner
+        thickness='4px'
+        speed='0.65s'
+        emptyColor='gray.200'
+        color='blue.500'
+        size='xl'
+        />
         </Box>
       )}
       <Grid
