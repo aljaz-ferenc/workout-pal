@@ -55,10 +55,11 @@ exports.protect = async (req, res, next) => {
 exports.authenticateUser = async (req, res, next) => {
     try {
         let token
-
+        
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1]
         }
+        console.log('aaaaaaaaaaaaaaaaaaaaa' + token)
 
         if (!token) {
             throw new Error('You are not logged in.')

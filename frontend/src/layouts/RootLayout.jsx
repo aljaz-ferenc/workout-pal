@@ -7,28 +7,28 @@ import { useUserStore } from "../store/userStore";
 import { authenticateUser } from "../api/api";
 
 export default function RootLayout() {
-  // const [verified, setVerified] = useState(null)
-  // const setUser = useUserStore((state) => state.setUser);
-  // const auth = useLoaderData();
+  const [verified, setVerified] = useState(null)
+  const setUser = useUserStore((state) => state.setUser);
+  const auth = useLoaderData();
   
-  // setUser(auth.data)
+  setUser(auth.data)
 
-  // // console.log('yo')
+  // console.log('yo')
 
-  // // setUser(userId); 
+  // setUser(userId); 
 
   
-  // useEffect(() => {
-  //   authenticateUser()
-  //   .then(res => {
-  //     setVerified(res.status)
-  //   })
-  //   .catch(err => console.log(err.message))
-  // }, [])
+  useEffect(() => {
+    authenticateUser()
+    .then(res => {
+      setVerified(res.status)
+    })
+    .catch(err => console.log(err.message))
+  }, [])
   
-  // if(verified === "fail") {
-  //   return <Navigate to="/login"/>
-  // }else if(verified === 'success'){
+  if(verified === "fail") {
+    return <Navigate to="/login"/>
+  }else if(verified === 'success'){
     
     return (
       <div className="root-layout">
@@ -40,7 +40,7 @@ export default function RootLayout() {
     </div>
   );
 }
-// }
+}
 
 export const protectedLoader = async () => {
   const response = await authenticateUser();

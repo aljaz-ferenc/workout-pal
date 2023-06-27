@@ -62,13 +62,13 @@ export default function LoginForm({ state, setState }) {
     console.log(response)
     if (response.status === "success") {
       const user = {
-        email: response.data.email,
-        name: response.data.name,
-        id: response.data._id
+        email: response.data.user.email,
+        name: response.data.user.name,
+        id: response.data.user._id
       }
       // console.log(user)
       setUser(user);
-      localStorage.setItem('workout-pal', JSON.stringify(response.token))
+      localStorage.setItem('workout-pal', JSON.stringify(response.data.token))
       console.log(localStorage.getItem('workout-pal'))
       navigate("/workouts");
     } else {

@@ -19,7 +19,7 @@ export default function App() {
     createRoutesFromElements(
       <Route>
         <Route path="login" element={<Login />} />
-        <Route element={<RootLayout />}  >
+        <Route element={<RootLayout />} loader={protectedLoader} >
           <Route path="/" element={<Navigate to="workouts" />} />
           <Route path="workouts" element={<Workouts />} />
           <Route path="workouts/:workoutId" element={<SingleWorkout />} />
