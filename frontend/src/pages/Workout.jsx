@@ -6,11 +6,9 @@ import { Box, Button, Heading, Text, Progress } from "@chakra-ui/react";
 const reducer = (state, action) => {
   switch (action.type) {
     case "nextSet": {
-      console.log(state.currentSet);
       return { ...state, currentSet: state.currentSet + 1 };
     }
     case "nextExercise": {
-      console.log(state.nextExercise);
       return {
         ...state,
         currentSet: 1,
@@ -20,7 +18,6 @@ const reducer = (state, action) => {
       };
     }
     case "nextRound": {
-      console.log(action.initialState);
       return {
         ...action.initialState,
         currentRound: state.currentRound + 1,
@@ -69,7 +66,6 @@ export default function Workout() {
   };
 
   const nextSet = async () => {
-    console.log(workout.restBetweenSets);
     await rest(workout.restBetweenSets, "betweenSets");
     dispatch({ type: "nextSet" });
   };

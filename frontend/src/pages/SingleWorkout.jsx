@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getOneWorkout } from "../api/api";
-import { Heading, Text, Button, Flex } from "@chakra-ui/react";
+import { Heading, Text, Button, Flex, Spinner } from "@chakra-ui/react";
 import { BsArrowRepeat } from "react-icons/bs";
 import { motion } from "framer-motion";
 import DeleteModal from "../components/DeleteModal";
@@ -27,7 +27,26 @@ export default function SingleWorkout() {
     setModalIsOpen(true);
   };
 
-  if (!workout) return <p>Loading...</p>;
+  if (!workout) return (
+    <Flex
+        bg="#212A3E"
+        color="#F1F6F9"
+        justifyContent="center"
+        alignItems="center"
+        direction="column"
+        width="full"
+        height="full"
+        className="single-workout"
+      >
+        <Spinner
+        thickness='4px'
+        speed='0.65s'
+        emptyColor='gray.200'
+        color='blue.500'
+        size='xl'
+        />
+        </Flex>
+  );
 
   return (
     <>

@@ -18,9 +18,7 @@ export default function MyWorkouts() {
       .then((res) => res.json())
       .then((json) => {
         if (json.status === "fail") throw new Error(json.message);
-        console.log(json)
         setWorkouts(json.data);
-        console.log(workouts)
       })
       .catch((err) => console.log(err.message))
       .finally(() => setIsFetching(false))

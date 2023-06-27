@@ -36,7 +36,7 @@ export default function WorkoutCard({ workout, user, index }) {
         animate={{ y: 0, opacity: 1, transition: { delay: 0.05 * index } }}
         className="workout-card"
         style={{
-          backgroundImage: `url(../../public/images/${workout.difficulty}.webp)`,
+          backgroundImage: `url(/${workout.difficulty}.webp)`,
           height: "100%",
           width: "100%",
           display: "flex",
