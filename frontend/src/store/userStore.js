@@ -11,7 +11,7 @@ export const useExerciseStore = create(set => ({
 }))
 
 export const useUserStore = create(set => ({
-    userId: null,
-    setUser: (payload) => set(state => ({ userId: payload }))
+    user: {email: null, name: null, id: null},
+    setUser: (payload) => set(state => ({ user: payload }))
 }))
 

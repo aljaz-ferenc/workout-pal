@@ -12,7 +12,7 @@ export default function SingleWorkout() {
   const [workout, setWorkout] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
-  const userId = useUserStore((state) => state.userId);
+  const userId = useUserStore((state) => state.user.id);
 
   useEffect(() => {
     getOneWorkout(workoutId)

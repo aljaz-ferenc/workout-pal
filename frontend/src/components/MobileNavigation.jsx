@@ -9,7 +9,6 @@ import {
 import "./Navigation.scss";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { CgGym } from "react-icons/cg";
-import { AiOutlineHome } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { MdTravelExplore, MdLibraryAdd } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -66,12 +65,6 @@ export default function MobileNavigation() {
                 onClick={() => setIsOpen(false)}
                 icon={<FaRegWindowClose />}
               />
-              <Box onClick={() => setIsOpen(false)}>
-                <NavItem path="/overview">
-                  <AiOutlineHome size={30} />
-                  <Link>Overview</Link>
-                </NavItem>
-              </Box>
               <Box onClick={() => setIsOpen(false)}>
                 <NavItem path="/my-workouts">
                   <CgGym size={30} />

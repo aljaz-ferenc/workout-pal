@@ -5,6 +5,7 @@ import {
   AlertTitle,
   Box,
   Button,
+  Flex,
   FormControl,
   FormHelperText,
   Heading,
@@ -18,7 +19,7 @@ import { useEffect, useState } from "react";
 import { ProgressBar } from "../components/ProgressBar";
 
 export default function Account() {
-  const userId = useUserStore((state) => state.userId);
+  const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
   const [currentPass, setCurrentPass] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -27,11 +28,20 @@ export default function Account() {
   const [error, setError] = useState(null);
   const [passIsSubmitting, setPassIsSubmitting] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
+  const [accDelError, setAccDelError] = useState(null)
 
-  const handleDeleteUser = () => {
-    deleteUser(userId).then((res) => {
-      if (res.status === "success") {
-        navigate("/login");
+  const handleDeleteUser = (e) => {
+    e.preventDefault()
+    deleteUser(user.id, delAccPass).then((res) => {
+      try{
+        if (res.status === "success") {
+          navigate("/login");
+        }else{
+          throw new Error(res.message)
+        }
+      }catch(err){
+        setAccDelError(err.message)
+        console.log(err.message)
       }
     });
   };
@@ -40,8 +50,7 @@ export default function Account() {
     e.preventDefault();
     setPassIsSubmitting(true);
     setError("");
-    updatePassword(currentPass, newPass, confirmNewPass).then((res) => {
-      console.log(res);
+    updatePassword(user.id, currentPass, newPass, confirmNewPass).then((res) => {
       try {
         if (res.status === "success") {
           setPasswordChanged(true);
@@ -49,7 +58,6 @@ export default function Account() {
           throw new Error(res.message);
         }
       } catch (err) {
-        console.log(err.message);
         setError(err.message);
       }
       setPassIsSubmitting(false);
@@ -81,6 +89,21 @@ export default function Account() {
       h="full"
       bg="#212A3E"
     >
+      <Flex gap="1rem" direction='column' border='1px solid gray' padding='2rem' w='full' maxW='25rem'>
+        <Heading textAlign="center">User</Heading>
+      <Flex direction='column' w='full'>
+        <Flex gap ='1rem'>
+          <Text>Username: </Text>
+          <Text>{user.name}</Text>
+        </Flex>
+      </Flex>
+      <Flex direction='column' w='full' maxW='25rem'>
+        <Flex gap ='1rem'>
+          <Text>Email: </Text>
+          <Text>{user.email}</Text>
+        </Flex>
+      </Flex>
+      </Flex>
       <form
         style={{
           display: "flex",
@@ -158,13 +181,14 @@ export default function Account() {
           display: "flex",
           flexDirection: "column",
           gap: "2rem",
-          border: "1px solid gray",
+          border: "1px solid red",
           padding: "2rem",
           width: "100%",
         }}
-        onSubmit={handleChangePassword}
+        onSubmit={handleDeleteUser}
       >
         <Heading textAlign="center">Delete Account</Heading>
+        <Text color='red' fontSize='.9rem'>This action cannot be undone!</Text>
         <FormControl>
           <Text>Password</Text>
           <Input
@@ -173,8 +197,13 @@ export default function Account() {
             onChange={(e) => setDelAccPass(e.target.value)}
             type="password"
           />
+          {accDelError === "password incorrect" && (
+            <FormHelperText color="red">
+              Password incorrect.
+            </FormHelperText>
+          )}
         </FormControl>
-        <Button type="submit" colorScheme="red" onClick={handleDeleteUser}>
+        <Button type="submit" colorScheme="red">
           Delete Account
         </Button>
       </form>

@@ -1,10 +1,11 @@
-const url = 'https://workout-pal-ethj.onrender.com/api/v1'
+// const url = 'https://workout-pal-ethj.onrender.com/api/v1'
+const url = 'https://smoggy-tan-sunbonnet.cyclic.app/api/v1'
+
 // const url = 'http://localhost:3000/api/v1'
 
 export const loginUser = async (user) => {
     const response = await fetch(`${url}/users/login`, {
         method: 'POST',
-        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -19,7 +20,6 @@ export const loginUser = async (user) => {
 export const signupUser = async (user) => {
     const response = await fetch(`${url}/users/signup`, {
         method: 'POST',
-        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -30,22 +30,16 @@ export const signupUser = async (user) => {
             passwordConfirm: user.passwordConfirm
         })
     })
-    return response
+    return await response.json()
 }
 
-export const getMyWorkouts = async () => {
-    const response = await fetch(`${url}/users/workouts`,
-        {
-            method: 'GET',
-            credentials: 'include'
-        })
+export const getMyWorkouts = async (userId) => {
+    const response = await fetch(`${url}/users/workouts/${userId}`)
     return response
-
 }
 
 export const getWorkoutsByUser = async (userId) => {
     const response = await fetch(`${url}/users/${userId}/workouts`)
-
     return response
 }
 
@@ -53,16 +47,15 @@ export const getOneWorkout = async (workoutId) => {
     console.log(workoutId)
     const response = await fetch(`${url}/workouts/workout/${workoutId}`, {
         method: 'GET',
-        credentials: 'include'
     })
 
     return response
 }
 
 export const createWorkout = async (workout) => {
+    console.log(workout)
     const response = await fetch(`${url}/workouts`, {
         method: 'POST',
-        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -72,24 +65,29 @@ export const createWorkout = async (workout) => {
 }
 
 export const authenticateUser = async () => {
-    // try {
-        
+    try {
+        const token = localStorage.getItem('workout-pal')
+        if (!token) throw new Error('Token not found')
+
         const response = await fetch(`${url}/auth`, {
-            method: 'GET',
-            credentials: 'include'
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            },
         })
-        
+        console.log(token)
+        console.log(response)
         return await response.json()
-    // } catch (err) {
-    //     console.log(err)
-    //     return err
-    // }
+    } catch (err) {
+        console.log(err.message)
+        return err
+    }
 }
 
 export const getAllWorkouts = async () => {
     const response = await fetch(`${url}/workouts`, {
         method: 'GET',
-        credentials: 'include'
     })
 
     return await response.json()
@@ -99,16 +97,19 @@ export const getAllWorkouts = async () => {
 export const deleteWorkout = async (workoutId) => {
     const response = await fetch(`${url}/workouts/workout/${workoutId}`, {
         method: 'DELETE',
-        credentials: 'include'
     })
 
     return await response.json()
 }
 
-export const deleteUser = async (userId) => {
+export const deleteUser = async (userId, password) => {
+    console.log(userId)
     const response = await fetch(`${url}/users/${userId}`, {
         method: 'DELETE',
-        credentials: 'include'
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({password})
     })
     return await response.json()
 }
@@ -116,19 +117,18 @@ export const deleteUser = async (userId) => {
 export const logoutUser = async () => {
     const response = await fetch(`${url}/users/logout`, {
         method: 'GET',
-        credentials: 'include'
     })
     return await response.json()
 }
 
-export const updatePassword = async (passwordCurrent, newPassword, passwordConfirm) => {
+export const updatePassword = async (id, passwordCurrent, newPassword, passwordConfirm) => {
     const response = await fetch(`${url}/users/updateMyPassword`, {
         method: 'PATCH',
-        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            id,
             passwordCurrent,
             password: newPassword,
             passwordConfirm

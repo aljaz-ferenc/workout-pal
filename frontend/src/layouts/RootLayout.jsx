@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navigation from "../components/Navigation";
 import { Navigate, Outlet, redirect, useLoaderData } from "react-router-dom";
 import "./RootLayout.scss";
@@ -7,18 +7,31 @@ import { useUserStore } from "../store/userStore";
 import { authenticateUser } from "../api/api";
 
 export default function RootLayout() {
+  const [verified, setVerified] = useState(null)
   const setUser = useUserStore((state) => state.setUser);
   const auth = useLoaderData();
-  const userId = auth.data._id;
-  console.log(auth)
+  
+  setUser(auth.data)
 
-  setUser(userId); 
+  // // console.log('yo')
 
-  if(auth.status === "fail") return <Navigate to="/login"/>
+  // // setUser(userId); 
 
-
-  return (
-    <div className="root-layout">
+  
+  // useEffect(() => {
+  //   authenticateUser()
+  //   .then(res => {
+  //     setVerified(res.status)
+  //   })
+  //   .catch(err => console.log(err.message))
+  // }, [])
+  
+  // if(verified === "fail") {
+  //   return <Navigate to="/login"/>
+  // }else if(verified === 'success'){
+    
+    return (
+      <div className="root-layout">
       <Navigation />
       <MobileNavigation />
       <div style={{ position: "relative", width: "100%" }}>
@@ -27,10 +40,11 @@ export default function RootLayout() {
     </div>
   );
 }
+// }
 
 export const protectedLoader = async () => {
   const response = await authenticateUser();
-  console.log(response)
+  console.log('fofo')
   if (response.status === "fail") return redirect("/login");
   return response;
 };

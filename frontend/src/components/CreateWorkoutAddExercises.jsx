@@ -40,7 +40,7 @@ export default function CreateWorkoutAddExercises({ setState }) {
   const removeAllExercises = useExerciseStore(
     (state) => state.removeAllExercises
   );
-  const userId = useUserStore((state) => state.userId);
+  const userId = useUserStore((state) => state.user.id);
   const clearWorkout = useExerciseStore((state) => state.clearWorkout);
   const navigate = useNavigate();
 
@@ -49,7 +49,6 @@ export default function CreateWorkoutAddExercises({ setState }) {
     setSets("");
     setReps("");
   };
-
 
   const handleAddExercise = (e) => {
     e.preventDefault();

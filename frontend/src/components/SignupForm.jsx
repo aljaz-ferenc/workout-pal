@@ -38,6 +38,9 @@ const signupValidate = (values) => {
   if (!values.password) {
     errors.password = "Required";
   }
+  if(values.password.length < 6){
+    errors.password = "Must be at least 6 characters."
+  }
   if (!values.passwordConfirm) {
     errors.passwordConfirm = "Required";
   }
@@ -63,17 +66,21 @@ export default function SignupForm({ state, setState }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser);
+  const [error, setError] = useState()
+  const user = useUserStore(state => state.user)
 
   const signupFormik = useFormik({
     initialValues: signupInitialValues,
     onSubmit: async (values) => {
       setIsLoading(true);
+      setError(null)
       const response = await signupUser(values);
-      if (response.ok) {
-        setUser((await response.json()).data._id);
+      if (response.status === 'success') {
+        setUser(response.data);
+        localStorage.setItem('workout-pal', JSON.stringify(response.token))
         navigate("/workouts");
       } else {
-        console.log("could not sign up");
+        setError(response.message)
       }
     },
     validate: signupValidate,
@@ -122,9 +129,14 @@ export default function SignupForm({ state, setState }) {
                     : false
                 }
               />
-              {signupFormik.errors.name && signupFormik.touched.name && (
+              {!error && signupFormik.errors.name && signupFormik.touched.name && (
                 <FormHelperText position="absolute" color="red">
                   {signupFormik.errors.name}
+                </FormHelperText>
+              )}
+              {error &&error.includes('dup key: { name:') && (
+                <FormHelperText position="absolute" color="red">
+                  User with this username already exists.
                 </FormHelperText>
               )}
             </FormControl>
@@ -144,9 +156,14 @@ export default function SignupForm({ state, setState }) {
                     : false
                 }
               />
-              {signupFormik.errors.email && signupFormik.touched.email && (
+              {!error && signupFormik.errors.email && signupFormik.touched.email && (
                 <FormHelperText position="absolute" color="red">
                   {signupFormik.errors.email}
+                </FormHelperText>
+              )}
+              {error && error.includes('dup key: { email:') && (
+                <FormHelperText position="absolute" color="red">
+                  User with this email already exists.
                 </FormHelperText>
               )}
             </FormControl>

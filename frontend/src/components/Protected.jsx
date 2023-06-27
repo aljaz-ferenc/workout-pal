@@ -13,8 +13,9 @@ export default function Protected() {
   return auth.status === "fail" ? <Navigate to="/login" /> : <Outlet />;
 }
 
-export const protectedLoader = async () => {
-  const response = await authenticateUser();
-  if (response.status === "fail") return redirect("/login");
-  return response;
-};
+// export const protectedLoader = async () => {
+//   const response = await authenticateUser(JSON.parse(localStorage.getItem('workout-pal')));
+//   console.log(response)
+//   if (response.status === "fail") return redirect("/login");
+//   return response;
+// };

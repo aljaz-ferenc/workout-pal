@@ -53,23 +53,30 @@ export default function LoginForm({ state, setState }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const setUser = useUserStore((state) => state.setUser);
-  const userId = useUserStore((state) => state.userId);
+  const {setUser, user} = useUserStore((state) => state);
+
+  const handleLogin = async (values) => {
+    setIsLoading(true);
+    const response = await loginUser(values);
+    setIsLoading(false);
+    if (response.status === "success") {
+      const user = {
+        email: response.data.user.email,
+        name: response.data.user.name,
+        id: response.data.user._id
+      }
+      // console.log(user)
+      setUser(user);
+      localStorage.setItem('workout-pal', JSON.stringify(response.data.token))
+      navigate("/workouts");
+    } else {
+      setError(response.message);
+    }
+  }
 
   const loginFormik = useFormik({
     initialValues: loginInitialValues,
-    onSubmit: async(values) => {
-      setIsLoading(true);
-      const response = await loginUser(values);
-      setIsLoading(false);
-      console.log(response)
-      if (response.status === "success") {
-        setUser(response.data._id);
-        navigate("/workouts");
-      } else {
-        setError(response.message);
-      }
-    },
+    onSubmit: handleLogin,
     validate: loginValidate,
   });
 
