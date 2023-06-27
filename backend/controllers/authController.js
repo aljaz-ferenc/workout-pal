@@ -1,48 +1,50 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
+const { promisify } = require('util')
 
-const signToken = id => {
-    return jwt.sign({ id: id._id }, process.env.JWT_SECRET, {
-        expiresIn:'24h'
-    })
-}
+// const signToken = id => {
+//     console.log(process.env.JWT_SECRET)
+//     return jwt.sign(id , process.env.JWT_SECRET, {
+//         expiresIn:'24h'
+//     })
+// }
 
-const sendToken = (user, statusCode, res) => {
-    const token = signToken(user)
+// const sendToken = (user, statusCode, res) => {
+//     const token = signToken(user)
 
-    const cookieOptions = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-        httpOnly: true,
-         secure: false
-    }
+//     const cookieOptions = {
+//         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+//         httpOnly: true,
+//          secure: false
+//     }
 
-    res.cookie('workouts', token, cookieOptions)
-    user.password = undefined
+//     res.cookie('workouts', token, cookieOptions)
+//     user.password = undefined
 
-    res.status(statusCode).json({
-        status: 'success',
-        token,
-        data: user
-    })
-}
+//     res.status(statusCode).json({
+//         status: 'success',
+//         token,
+//         data: user
+//     })
+// }
 
 exports.protect = async (req, res, next) => {
     console.log('protect')
-    try{
+    try {
         const token = req.cookies.workouts
-        
-        if(!token) return next(new Error('You are not logged in.'))
-        
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        if (!token) return next(new Error('You are not logged in.'))
+
+        const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
         const currentUser = await User.findById(decoded.id)
 
-        if(!currentUser) return next(new Error('The user with this token no longer exists'))
+        if (!currentUser) return next(new Error('The user with this token no longer exists'))
 
         req.user = currentUser
-        
+
         return next()
 
-    }catch(err){
+    } catch (err) {
         res.status(401).json({
             status: 'fail',
             message: err.message
@@ -51,45 +53,70 @@ exports.protect = async (req, res, next) => {
 }
 
 exports.authenticateUser = async (req, res, next) => {
-    console.log('authenticate cookies: ' + req.cookies.workouts)
-    try{
-        const token = req.cookies.workouts
+    try {
+        let token
 
-        if(!token) return next(new Error('You are not logged in.....'))
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1]
+        }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        const currentUser = await User.findById(decoded.id)
+        if (!token) {
+            throw new Error('You are not logged in.')
+        }
 
-        if(!currentUser) return next(new Error('The user with this token no longer exists'))
+        const decoded = jwt.verify(JSON.parse(token), process.env.JWT_SECRET);
+        console.log(decoded);
+
+        const currentUser = await User.findById(decoded.user)
+        console.log(currentUser)
+        if (!currentUser) {
+            throw new Error('User with this token does not exist.')
+        }
+
+        req.user = currentUser
 
         res.status(200).json({
             status: 'success',
-            data: currentUser
+            message: 'loggedIn',
+            data: {
+                id: decoded.user,
+                name: currentUser.name,
+                email: currentUser.email
+            }
         })
-    }catch(err){
+
+    } catch (err) {
         res.status(401).json({
             status: 'fail',
-            message: err.message
+            message: 'You are not authenticated.'
         })
     }
 }
 
 exports.updatePassword = async (req, res, next) => {
-    const token = req.cookies.workouts
+    try {
+        const userId = req.body.id
 
-    if(!req.cookies.workouts) return next(new Error('This user does not exist.'))
+        const user = await User.findById(userId).select('+password')
+        if(!user) return next(new Error('This user does not exist.'))
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const user = await User.findById(decoded.id).select('+password')
+        if (!(await user.checkPassword(req.body.passwordCurrent, user.password))) {
+            return next(new Error('Password incorrect'))
+        }
 
-    if(!(await user.checkPassword(req.body.passwordCurrent, user.password))){
-        return next(new Error('Password incorrect'))
+        user.password = req.body.password
+        user.passwordConfirm = req.body.passwordConfirm
+        await user.save()
+
+        res.status(201).json({
+            status: 'success'
+        })
+        
+    } catch (err) {
+        res.status(401).json({
+            status: 'fail',
+            message: 'You are not authenticated.'
+        })
     }
-
-    user.password = req.body.password
-    user.passwordConfirm = req.body.passwordConfirm
-    await user.save()
-
-    sendToken(user.id, 200, res)
 }
 

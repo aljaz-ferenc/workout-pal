@@ -10,7 +10,7 @@ router.route('/')
 router.route('/:userId')
     .delete(userController.deleteUser)
 
-router.route('/workouts')
+router.route('/workouts/:userId')
     .get(userController.getMyWorkouts)
 
 

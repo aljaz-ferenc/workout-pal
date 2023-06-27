@@ -1,7 +1,7 @@
 // const url = 'https://workout-pal-ethj.onrender.com/api/v1'
-const url = 'https://smoggy-tan-sunbonnet.cyclic.app/api/v1'
+// const url = 'https://smoggy-tan-sunbonnet.cyclic.app/api/v1'
 
-// const url = 'http://localhost:3000/api/v1'
+const url = 'http://localhost:3000/api/v1'
 
 export const loginUser = async (user) => {
     const response = await fetch(`${url}/users/login`, {
@@ -77,7 +77,7 @@ export const authenticateUser = async () => {
             },
         })
         console.log(token)
-        console.log(response)
+        // console.log(awaitresponse.json())
         return await response.json()
     } catch (err) {
         console.log(err.message)

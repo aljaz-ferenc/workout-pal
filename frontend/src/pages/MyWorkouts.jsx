@@ -15,8 +15,10 @@ export default function MyWorkouts() {
     getMyWorkouts(user.id)
       .then((res) => res.json())
       .then((json) => {
-        if (workouts.status === "fail") throw new Error(json.message);
+        if (json.status === "fail") throw new Error(json.message);
+        console.log(json)
         setWorkouts(json.data);
+        console.log(workouts)
       })
       .catch((err) => console.log(err.message));
   }, []);

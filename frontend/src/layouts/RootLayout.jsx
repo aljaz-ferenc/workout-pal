@@ -7,11 +7,11 @@ import { useUserStore } from "../store/userStore";
 import { authenticateUser } from "../api/api";
 
 export default function RootLayout() {
-  const [verified, setVerified] = useState(null)
-  const setUser = useUserStore((state) => state.setUser);
-  const auth = useLoaderData();
+  // const [verified, setVerified] = useState(null)
+  // const setUser = useUserStore((state) => state.setUser);
+  // const auth = useLoaderData();
   
-  setUser(auth.data)
+  // setUser(auth.data)
 
   // // console.log('yo')
 

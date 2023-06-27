@@ -3,6 +3,7 @@ const Workout = require('../models/workoutModel')
 const jwt = require('jsonwebtoken')
 
 const signToken = id => {
+    console.log(id + 'hhhhhhhhhhhhhhhh')
     return jwt.sign({ id: id._id }, process.env.JWT_SECRET, {
         expiresIn:'24h'
     })
@@ -47,6 +48,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.register = async (req, res) => {
     try {
+
         const user = await User.create({
             name: req.body.name,
             email: req.body.email,
@@ -54,7 +56,20 @@ exports.register = async (req, res) => {
             passwordConfirm: req.body.passwordConfirm
         })
 
-        sendToken(user, 201, res)
+        
+        const token = jwt.sign({user: user._id.toString()}, process.env.JWT_SECRET, {
+            expiresIn: '24h'
+        })
+        
+        res.status(201).json({
+            status: 'success',
+            token,
+            data: {
+                id: user._id,
+                name: user.name,
+                email:user.email
+            }
+        })
 
         
     } catch (err) {
@@ -66,7 +81,7 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async (req, res, next) => {
-    console.log('login body: ' + req.body.password)
+    
     try {
         const {email, password} = req.body
         if(!email || !password) return next(new Error('Please provide your email and pasword.'))
@@ -75,8 +90,18 @@ exports.login = async (req, res, next) => {
         if(!user) return next(new Error('User not found.'))
 
         if(!await user.checkPassword(password, user.password)) return next(new Error('Password incorrect.'))
-        sendToken(user, 200, res)
 
+        user.password = undefined
+
+        const token = jwt.sign({user: user._id.toString()}, process.env.JWT_SECRET, {
+            expiresIn: '24h'
+        })
+
+        console.log(token)
+        res.status(200).json({
+            status: 'success',
+            data: {token, user}
+        })
 
     } catch (err) {
         res.status(401).json({
@@ -102,13 +127,9 @@ exports.logout = async (req, res) => {
 }
 
 exports.getMyWorkouts = async (req, res) => {
-
     try{
-        const token = req.cookies.workouts
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
-        const workouts = await Workout.find({user: decoded.id})
+        const userId = req.params.userId
+        const workouts = await Workout.find({user: userId})
 
         res.status(200).json({
             status: 'success',
@@ -139,11 +160,15 @@ exports.getWorkoutsByUser = async (req, res) => {
     }
 }
 
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
     try{
         const userId = req.params.userId
-        const user = await User.findByIdAndDelete(userId)
-        const workouts = await Workout.deleteMany({user: userId})
+        const user = await User.findById(userId).select('+password')
+        const password = req.body.password
+
+        if(!(await user.checkPassword(password, user.password))) return next(new Error('password incorrect'))
+        await User.findByIdAndDelete(userId)
+        await Workout.deleteMany({user: userId})
 
         res.status(200).json({
             status: 'success',
@@ -153,7 +178,7 @@ exports.deleteUser = async (req, res) => {
     }catch(err){
         res.status(404).json({
             status: 'fail',
-            message: "Could not get the user's workouts"
+            message: err.message
         })
     }
 }
