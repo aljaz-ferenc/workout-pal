@@ -77,7 +77,7 @@ export default function LoginForm({ state, setState }) {
       })
       .catch((err) => {
         console.log(err.message);
-        setError(err.message);
+        setError('Password incorrect.');
       })
       .finally(() => {
         setIsLoading(false);
@@ -167,7 +167,7 @@ export default function LoginForm({ state, setState }) {
                     : false
                 }
               />
-              {!error === "Password incorrect. " &&
+              {!error === "Password incorrect." &&
                 loginFormik.errors.password &&
                 loginFormik.touched.password && (
                   <FormHelperText position="absolute" color="red">
