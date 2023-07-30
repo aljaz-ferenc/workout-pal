@@ -5,7 +5,9 @@ import { CgGym } from "react-icons/cg";
 import { BsFillPersonFill } from "react-icons/bs";
 import { MdTravelExplore, MdLibraryAdd } from "react-icons/md";
 import { CgLogOut } from "react-icons/cg";
+import { AiFillHome } from "react-icons/ai";
 import { logoutUser } from "../api/api";
+
 
 const hoverProps = {
   bg: "#2b6cb0",

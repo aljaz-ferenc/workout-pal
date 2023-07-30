@@ -1,6 +1,7 @@
 // const url = 'https://workout-pal-ethj.onrender.com/api/v1'
+const url = 'https://workout-pal-mprc.onrender.com/api/v1'
 // const url = 'http://localhost:3000/api/v1'
-const url = 'https://elegant-bat-buckle.cyclic.app/api/v1'
+// const url = 'https://elegant-bat-buckle.cyclic.app/api/v1'
 
 export const loginUser = async (user) => {
 
@@ -33,6 +34,11 @@ export const signupUser = async (user) => {
             passwordConfirm: user.passwordConfirm
         })
     })
+    return await response.json()
+}
+
+export const getOneUser = async(userId) => {
+    const response = await fetch(`${url}/users/${userId}`)
     return await response.json()
 }
 
@@ -133,6 +139,19 @@ export const updatePassword = async (id, passwordCurrent, newPassword, passwordC
             password: newPassword,
             passwordConfirm
         })
+    })
+    return await response.json()
+}
+
+export const updateMeasurements = async (userId, data) => {
+    console.log(data)
+
+    const response = await fetch(`${url}/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
     })
     return await response.json()
 }

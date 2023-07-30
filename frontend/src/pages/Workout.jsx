@@ -2,6 +2,8 @@ import { useEffect, useReducer, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import WorkoutComplete from "../components/WorkoutComplete";
 import { Box, Button, Heading, Text, Progress } from "@chakra-ui/react";
+import { updateMeasurements } from "../api/api";
+import { useUserStore } from "../store/userStore";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -47,6 +49,12 @@ export default function Workout() {
   const [restCountdown, setRestCountdown] = useState(null);
   const [isResting, setIsResting] = useState(false);
   const [isPausing, setIsPausing] = useState(false);
+  const [startTime, setStartTime] = useState()
+  const userId = useUserStore((state) => state.user.id);
+
+  useEffect(() =>  {
+    setStartTime(Date.now())
+  }, [])
 
   const next = () => {
     const setIsComplete =
@@ -86,6 +94,14 @@ export default function Workout() {
 
   const completeWorkout = () => {
     setWorkoutIsComplete(true);
+    const data = {
+      updateField: 'workout',
+      workout: workout.name,
+      duration: workout.duration,
+      time: Date.now(),
+      difficulty: workout.difficulty
+    }
+    updateMeasurements(userId, data)
   };
 
   const rest = (time, type) => {
