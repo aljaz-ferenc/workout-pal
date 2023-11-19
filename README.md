@@ -2,6 +2,8 @@
 
 With Workout Pal, users can create and share their personalized workout routines. The app guides you through a chosen workout, providing precise instructions for each exercise.
 
+![Explore workouts](./readme-images/explore.png)
+
 ## Technologies Used
 
 - **Frontend**: React.js, Chakra-UI
