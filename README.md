@@ -14,8 +14,6 @@ With Workout Pal, users can create and share their personalized workout routines
 
 WorkoutPal simplifies account management, allowing users to effortlessly create, update, and delete accounts. Authentication is secured through the use of Json Web Tokens.
 
-![Account Management](./readme-images/account.png)
-
 ### Create a Workout
 
 Under the Create Workout section, you will be asked to fill a form and provide information about a new workout. Each workout consists of multiple exercises, which you can add in the next step. Give your workout a name, a number of rounds (how many times the circuit of all exercises is repeated), amount of seconds to rest between each set of an exercise, and amount of rest between rounds of a workout. 
