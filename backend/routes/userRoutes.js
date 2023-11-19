@@ -7,22 +7,26 @@ const router = express.Router()
 
 
 router.route('/workouts/:userId')
-.get(userController.getMyWorkouts)
+    .get(userController.getMyWorkouts)
 
 
 router.route('/login')
-.post(userController.login)
+    .post(userController.login)
 
 router.route('/signup')
-.post(userController.register)
+    .post(userController.register)
 
 router.route('/logout')
-.get(userController.logout)
+    .get(userController.logout)
 
 router.route('/updateMyPassword')
-.patch(authController.updatePassword)
+    .patch(authController.updatePassword)
+    
 router.route('/:userId')
-.delete(userController.deleteUser)
+    .delete(userController.deleteUser)
+    .patch(userController.updateUser)
+    .get(userController.getOneUser)
+
 router.route('/')
     .get(userController.getAllUsers)
 

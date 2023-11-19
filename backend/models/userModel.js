@@ -28,6 +28,22 @@ const userSchema = new mongoose.Schema({
             message: 'Passwords do not match.'
         }
     },
+    weightMeasurements: {
+        type: [Object],
+        default: []
+    },
+    waterIntake: {
+        type: [Object],
+        default: []
+    },
+    waterGoal: {
+        type: Number,
+        default: 2000
+    },
+    completedWorkouts: {
+        type: [Object],
+        default: []
+    },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date

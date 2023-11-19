@@ -125,6 +125,34 @@ exports.logout = async (req, res) => {
     }
 }
 
+exports.updateUser = async (req, res) => {
+    let user
+
+    try {
+        if (req.body.updateField === 'weight') {
+            user = await User.findByIdAndUpdate(req.params.userId, { $push: { weightMeasurements: { time: Date.now(), measurement: req.body.measurement } } }, { new: true })
+        }
+        if (req.body.updateField === 'water') {
+            user = await User.findByIdAndUpdate(req.params.userId, { $push: { waterIntake: { time: Date.now(), measurement: req.body.measurement } }, waterGoal: req.body.goal }, { new: true })
+        }
+        if (req.body.updateField === 'workout') {
+            user = await User.findByIdAndUpdate(req.params.userId, { $push: { completedWorkouts: { workout: req.body.workout, duration: req.body.duration, time: Date.now(), difficulty: req.body.difficulty } } }, { new: true })
+        }
+
+
+        res.status(200).json({
+            status: 'success',
+            data: user.waterIntake
+        })
+
+    } catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: "Could update user."
+        })
+    }
+}
+
 exports.getMyWorkouts = async (req, res) => {
     try {
         const userId = req.params.userId
@@ -174,6 +202,22 @@ exports.deleteUser = async (req, res, next) => {
             data: user
         })
 
+    } catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err.message
+        })
+    }
+}
+
+exports.getOneUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId)
+
+        res.status(200).json({
+            status: 'success',
+            data: user
+        })
     } catch (err) {
         res.status(404).json({
             status: 'fail',
